@@ -1,10 +1,8 @@
 FROM php:8.3-apache
 
 RUN apt-get update && apt-get install -y \
-    git unzip libpq-dev libzip-dev \
-    && docker-php-ext-install pdo pdo_pgsql zip \
-    && a2enmod rewrite \
-    && rm -rf /var/lib/apt/lists/*
+    git unzip libzip-dev \
+    && docker-php-ext-install pdo_mysql zip \
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
