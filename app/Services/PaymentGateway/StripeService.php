@@ -38,7 +38,7 @@ class StripeService
         return $this->publicKey;
     }
 
-    public function createPaymentIntent($amount, $currency = 'usd')
+    public function createPaymentIntent($amount, $currency = 'ars')
     {
         return $this->client->paymentIntents->create([
             'amount' => $amount,

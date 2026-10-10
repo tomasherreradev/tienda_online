@@ -14,9 +14,9 @@ return [
         'privacy_policy' => 'سیاست حفظ حریم خصوصی',
         'terms_of_service' => 'شرایط خدمات',
         'follow_us' => 'ما را دنبال کنید',
-        'footer_logo_alt' => 'لوگوی پاورقی Velstore',
-        'copyright' => '© ۲۰۲۵ نسخه نمایشی Velstore. تمامی حقوق محفوظ است.',
-        'powered_by' => 'قدرت گرفته از Velstore Labs',
+        'footer_logo_alt' => 'لوگوی پاورقی Tejada Hogar',
+        'copyright' => '© ۲۰۲۵ نسخه نمایشی Tejada Hogar. تمامی حقوق محفوظ است.',
+        'powered_by' => 'قدرت گرفته از Tejada Hogar Labs',
     ],
 
     'home' => [
@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => 'خوش آمدید',
-        'theme_name' => '👋 Xylo-Theme',
+        'theme_name' => '👋 Tejada Hogar',
         'signup_now' => 'ایجاد حساب کاربری مشتری',
         'signup_description' => 'ثبت‌نام کنید تا خرید را آغاز کنید، سفارشات خود را پیگیری کنید، محصولات مورد علاقه‌تان را ذخیره کنید و به پیشنهادات ویژه دسترسی داشته باشید.',
-        'copyright' => '© 2025 Xylo-Theme. کلیه حقوق محفوظ است.',
+        'copyright' => '© 2025 Tejada Hogar. کلیه حقوق محفوظ است.',
         'welcome_back' => 'بیایید شروع کنیم',
         'form_subtitle' => 'برای ایجاد حساب خرید، اطلاعات خود را وارد کنید.',
         'name' => 'نام و نام خانوادگی',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => 'خوش آمدید دوباره',
-        'theme_name' => '👋 Xylo-Theme',
+        'theme_name' => '👋 Tejada Hogar',
         'login_now' => 'وارد حساب کاربری خود شوید',
         'login_description' => 'برای مدیریت سفارشات، لیست علاقه‌مندی‌ها و دریافت تجربه خرید شخصی وارد شوید.',
-        'copyright' => '© 2025 Xylo-Theme. کلیه حقوق محفوظ است.',
+        'copyright' => '© 2025 Tejada Hogar. کلیه حقوق محفوظ است.',
         'welcome_back' => 'خوشحالیم دوباره شما را می‌بینیم',
         'form_subtitle' => 'لطفاً برای ادامه اطلاعات ورود خود را وارد کنید.',
         'email' => 'آدرس ایمیل',

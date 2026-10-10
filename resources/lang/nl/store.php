@@ -14,9 +14,9 @@ return [
         'privacy_policy' => 'Privacybeleid',
         'terms_of_service' => 'Algemene Voorwaarden',
         'follow_us' => 'Volg ons',
-        'footer_logo_alt' => 'Velstore Voettekst Logo',
-        'copyright' => '© 2025 Velstore Demo. Alle rechten voorbehouden.',
-        'powered_by' => 'Aangedreven door Velstore Labs',
+        'footer_logo_alt' => 'Tejada Hogar Voettekst Logo',
+        'copyright' => '© 2025 Tejada Hogar Demo. Alle rechten voorbehouden.',
+        'powered_by' => 'Aangedreven door Tejada Hogar Labs',
     ],
 
     'home' => [
@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => 'Welkom',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Tejada Hogar 👋',
         'signup_now' => 'Maak uw klantaccount aan',
         'signup_description' => 'Registreer om te beginnen met shoppen, uw bestellingen te volgen, favoriete artikelen op te slaan en toegang te krijgen tot exclusieve aanbiedingen.',
-        'copyright' => '© 2025 Xylo-Theme. Alle rechten voorbehouden.',
+        'copyright' => '© 2025 Tejada Hogar. Alle rechten voorbehouden.',
         'welcome_back' => 'Laten we beginnen',
         'form_subtitle' => 'Vul uw gegevens in om een winkelaccount aan te maken.',
         'name' => 'Volledige naam',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => 'Welkom terug',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Tejada Hogar 👋',
         'login_now' => 'Log in op uw account',
         'login_description' => 'Log in om uw bestellingen te beheren, uw verlanglijst te bekijken en te genieten van een persoonlijke winkelervaring.',
-        'copyright' => '© 2025 Xylo-Theme. Alle rechten voorbehouden.',
+        'copyright' => '© 2025 Tejada Hogar. Alle rechten voorbehouden.',
         'welcome_back' => 'Goed u weer te zien',
         'form_subtitle' => 'Voer uw inloggegevens in om door te gaan.',
         'email' => 'E-mailadres',

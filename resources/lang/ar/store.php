@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => 'مرحبًا',
-        'theme_name' => 'Xylo-Theme 👋 منصّة زيلو',
+        'theme_name' => 'Tejada Hogar 👋 منصّة زيلو',
         'signup_now' => 'إنشاء حساب العميل',
         'signup_description' => 'قم بالتسجيل للبدء في التسوق، تتبّع طلباتك، حفظ عناصر المفضلة، والحصول على عروض حصرية.',
-        'copyright' => '© 2025 Xylo-Theme. جميع الحقوق محفوظة.',
+        'copyright' => '© 2025 Tejada Hogar. جميع الحقوق محفوظة.',
         'welcome_back' => 'لنبدأ الآن',
         'form_subtitle' => 'يرجى إدخال بياناتك لإنشاء حساب التسوق.',
         'name' => 'الاسم الكامل',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => 'مرحبًا بعودتك',
-        'theme_name' => 'Xylo-Theme 👋 منصّة زيلو',
+        'theme_name' => 'Tejada Hogar 👋 منصّة زيلو',
         'login_now' => 'تسجيل الدخول إلى حسابك',
         'login_description' => 'قم بتسجيل الدخول لإدارة طلباتك، حفظ مفضلاتك، والاستمتاع بتجربة تسوق مخصصة.',
-        'copyright' => '© 2025 Xylo-Theme. جميع الحقوق محفوظة.',
+        'copyright' => '© 2025 Tejada Hogar. جميع الحقوق محفوظة.',
         'welcome_back' => 'سعداء برؤيتك مرة أخرى',
         'form_subtitle' => 'يرجى إدخال بيانات تسجيل الدخول للمتابعة.',
         'email' => 'البريد الإلكتروني',

@@ -2,7 +2,7 @@
 
 return [
     'auth' => [
-        'velstore' => '维尔斯托尔',
+        'tienda_digital' => 'Tienda Digital',
         'login' => '登录',
         'email' => '电子邮件地址',
         'password' => '密码',

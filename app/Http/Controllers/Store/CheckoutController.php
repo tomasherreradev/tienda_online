@@ -7,9 +7,12 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentGateway;
 use App\Models\ProductVariant;
+use App\Services\PaymentGateway\MercadoPagoService;
+use App\Services\PaymentGateway\PaymentManager;
 use App\Services\Store\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
@@ -25,40 +28,119 @@ class CheckoutController extends Controller
             ? $paypal->getConfigValue('client_id', 'sandbox')
             : null;
 
+        $stripe = $paymentGateways->firstWhere('code', 'stripe');
+        $stripePublicKey = $stripe
+            ? $stripe->getConfigValue('public_key', 'sandbox')
+            : null;
+
+        $mercadopago = $paymentGateways->firstWhere('code', 'mercadopago');
+        $mercadopagoPublicKey = $mercadopago
+            ? $mercadopago->getConfigValue('public_key', 'sandbox')
+            : config('services.mercadopago.public_key');
+
         $cart = Session::get('cart', []);
         $subtotal = 0;
 
-        foreach ($cart as $key => $item) {
-            $product = \App\Models\Product::with(['translations', 'thumbnail'])->find($item['product_id']);
-
-            $variant = isset($item['variant_id'])
-                ? ProductVariant::with('images')->find($item['variant_id'])
-                : ProductVariant::where('product_id', $item['product_id'])->where('is_primary', true)->first();
-
+        foreach ($cart as $item) {
             $subtotal += $item['price'] * $item['quantity'];
         }
 
         $shipping = null;
         $total = $subtotal + ($shipping ?? 0);
 
-        return view('themes.xylo.checkout', compact('cart', 'subtotal', 'shipping', 'total', 'paymentGateways', 'paypalClientId'));
+        return view('themes.xylo.checkout', compact(
+            'cart',
+            'subtotal',
+            'shipping',
+            'total',
+            'paymentGateways',
+            'paypalClientId',
+            'stripePublicKey',
+            'mercadopagoPublicKey'
+        ));
     }
 
     public function process(Request $request)
     {
-        $gatewayCode = $request->input('gateway');
-        $amount = 100; // you can replace this with cart total
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
+            'address' => 'required|string|max:255',
+            'suite' => 'nullable|string|max:100',
+            'city' => 'required|string|max:100',
+            'state' => 'required|string|max:10',
+            'zipcode' => 'required|string|max:20',
+            'country' => 'required|string|max:100',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:30',
+            'gateway' => 'required|string|in:mercadopago,paypal,stripe',
+        ]);
+
+        $cart = Session::get('cart', []);
+        if ($cart === []) {
+            return response()->json(['success' => false, 'message' => 'El carrito está vacío.'], 422);
+        }
+
+        $total = collect($cart)->sum(fn ($item) => $item['price'] * $item['quantity']);
+
+        $provinceName = config('store.provinces.'.$validated['state'], $validated['state']);
+
+        Session::put('checkout.shipping', [
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'name' => trim($validated['first_name'].' '.$validated['last_name']),
+            'address' => $validated['address'],
+            'suite' => $validated['suite'] ?? null,
+            'city' => $validated['city'],
+            'state' => $validated['state'],
+            'state_name' => $provinceName,
+            'postal_code' => $validated['zipcode'],
+            'country' => $validated['country'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+        ]);
+
+        $environment = $this->mercadoPagoEnvironment();
 
         try {
-            $paymentService = PaymentManager::make($gatewayCode, 'sandbox');
+            if ($validated['gateway'] === 'mercadopago') {
+                $mp = PaymentManager::make('mercadopago', $environment);
+                $preference = $mp->createPreference($cart, $total, Session::get('checkout.shipping'));
+                $redirectUrl = $mp->resolveCheckoutUrl($preference);
 
-            $order = $paymentService->createOrder($amount, 'USD');
+                Session::put('checkout.mercadopago_reference', $preference['external_reference'] ?? null);
 
-            return response()->json([
-                'success' => true,
-                'gateway' => $gatewayCode,
-                'order' => $order,
-            ]);
+                if (! $redirectUrl) {
+                    throw new \RuntimeException('Mercado Pago no devolvió URL de pago.');
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'redirect' => $redirectUrl,
+                ]);
+            }
+
+            if ($validated['gateway'] === 'paypal') {
+                $paypal = PaymentManager::make('paypal', $environment);
+                $order = $paypal->createOrder(number_format($total, 2, '.', ''), storeCurrencyCode());
+
+                return response()->json([
+                    'success' => true,
+                    'gateway' => 'paypal',
+                    'order' => $order,
+                ]);
+            }
+
+            if ($validated['gateway'] === 'stripe') {
+                $stripe = PaymentManager::make('stripe', $environment);
+                $intent = $stripe->createPaymentIntent((int) round($total * 100), 'ars');
+
+                return response()->json([
+                    'success' => true,
+                    'gateway' => 'stripe',
+                    'client_secret' => $intent->client_secret ?? null,
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Payment process failed: '.$e->getMessage());
 
@@ -67,6 +149,49 @@ class CheckoutController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
+
+        return response()->json(['success' => false, 'message' => 'Método de pago no soportado.'], 422);
+    }
+
+    public function mercadoPagoSuccess(Request $request, OrderService $orderService)
+    {
+        $paymentId = $request->query('payment_id');
+
+        if (! $paymentId) {
+            return redirect()->route('checkout.index')->with('error', __('store.checkout.order_failed'));
+        }
+
+        try {
+            $mp = PaymentManager::make('mercadopago', $this->mercadoPagoEnvironment());
+            $payment = $mp->getPayment($paymentId);
+
+            if (! in_array($payment['status'] ?? '', ['approved', 'authorized'], true)) {
+                return redirect()->route('checkout.index')->with('error', __('store.checkout.order_failed'));
+            }
+
+            $orderService->createOrderFromCart('mercadopago', (string) $paymentId, (float) ($payment['transaction_amount'] ?? 0));
+
+            return redirect()->route('checkout.success');
+        } catch (\Exception $e) {
+            Log::error('Mercado Pago success error: '.$e->getMessage());
+
+            return redirect()->route('checkout.index')->with('error', $e->getMessage());
+        }
+    }
+
+    public function mercadoPagoFailure()
+    {
+        return redirect()->route('checkout.index')->with('error', __('store.checkout.order_failed'));
+    }
+
+    public function mercadoPagoPending()
+    {
+        return redirect()->route('checkout.success')->with('success', __('store.checkout.order_pending'));
+    }
+
+    public function success()
+    {
+        return view('themes.xylo.checkout-success');
     }
 
     /**
@@ -74,48 +199,29 @@ class CheckoutController extends Controller
      */
     public function paypalSuccess(Request $request, OrderService $orderService)
     {
-        $orderId = $request->query('token'); // PayPal returns ?token=ORDER_ID
+        $orderId = $request->query('token');
 
         try {
             $paypal = PaymentManager::make('paypal', 'sandbox');
             $result = $paypal->captureOrder($orderId);
 
             if (($result['status'] ?? null) === 'COMPLETED') {
+                $orderService->createOrderFromPaypal($result);
 
-                $order = $orderService->createOrderFromPaypal($result);
-
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Payment completed & order stored successfully.',
-                    'order_id' => $order->id,
-                    'details' => $result,
-                ]);
+                return redirect()->route('checkout.success');
             }
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Payment not completed.',
-                'details' => $result,
-            ]);
+            return redirect()->route('checkout.index')->with('error', __('store.checkout.order_failed'));
         } catch (\Exception $e) {
-            \Log::error('PayPal success error: '.$e->getMessage());
+            Log::error('PayPal success error: '.$e->getMessage());
 
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
+            return redirect()->route('checkout.index')->with('error', $e->getMessage());
         }
     }
 
-    /**
-     * PayPal cancel callback
-     */
     public function paypalCancel()
     {
-        return response()->json([
-            'success' => false,
-            'message' => 'Payment was cancelled by user.',
-        ]);
+        return redirect()->route('checkout.index')->with('error', __('store.checkout.order_failed'));
     }
 
     public function store(Request $request)
@@ -131,12 +237,10 @@ class CheckoutController extends Controller
             return redirect()->back()->with('error', 'Cart is empty!');
         }
 
-        // Calculate total
         $total = collect($cart)->sum(function ($item) {
             return $item['price'] * $item['quantity'];
         });
 
-        // Save Order
         $order = Order::create([
             'user_id' => Auth::id(),
             'address' => $request->address,
@@ -145,7 +249,6 @@ class CheckoutController extends Controller
             'status' => 'pending',
         ]);
 
-        // Save Order Items
         foreach ($cart as $item) {
             OrderItem::create([
                 'order_id' => $order->id,
@@ -157,9 +260,16 @@ class CheckoutController extends Controller
             ]);
         }
 
-        // Clear the session cart
         Session::forget('cart');
 
-        return redirect()->route('thankyou')->with('success', 'Order placed successfully!');
+        return redirect()->route('checkout.success')->with('success', __('store.checkout.order_success'));
+    }
+
+    private function mercadoPagoEnvironment(): string
+    {
+        $token = trim((string) config('services.mercadopago.access_token', ''));
+
+        return MercadoPagoService::environmentForToken($token)
+            ?? (config('app.env') === 'production' ? 'live' : 'sandbox');
     }
 }

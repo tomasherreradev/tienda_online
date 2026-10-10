@@ -4,21 +4,21 @@
 @endsection
 @section('content')
     @php $currency = activeCurrency(); @endphp
-    <section class="banner-area inner-banner pt-5 animate__animated animate__fadeIn productinnerbanner">
-        <div class="container h-100">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="breadcrumbs">
-                        <a href="#">{{ __('store.checkout.breadcrumb_home') }}</a> <i class="fa fa-angle-right"></i> <a href="#">{{ __('store.checkout.breadcrumb_category') }}</a> <i
-                            class="fa fa-angle-right"></i>{{ __('store.checkout.breadcrumb_checkout') }}
-                    </div>
-                </div>
-            </div>
+    <div class="store-page checkout-page pb-5">
+    <section class="store-page-hero">
+        <div class="container">
+            <nav class="store-breadcrumbs">
+                <a href="{{ route('xylo.home') }}">{{ __('store.checkout.breadcrumb_home') }}</a>
+                <i class="fa fa-angle-right"></i>
+                <a href="{{ route('cart.view') }}">{{ __('store.cart.breadcrumb_cart') }}</a>
+                <i class="fa fa-angle-right"></i>
+                <span>{{ __('store.checkout.breadcrumb_checkout') }}</span>
+            </nav>
+            <h1>{{ __('store.checkout.breadcrumb_checkout') }}</h1>
         </div>
     </section>
 
-
-    <div class="cart-page pb-5 pt-5">
+    <div class="pt-3">
         <div class="container">
             <div class="row">
                 <div class="col-md-7">
@@ -36,19 +36,13 @@
                                     <input type="text" name="last_name" class="form-control" placeholder="{{ __('store.checkout.last_name') }}" required>
                                 </div>
                             </div>
+                            <input type="hidden" name="country" value="{{ config('store.country_name') }}">
                             <div class="row">
                                 <div class="col-md-12 mt-3">
                                     <input type="text" name="address" class="form-control" placeholder="{{ __('store.checkout.address') }}" required>
                                 </div>
-                                <div class="col-md-6 mt-3">
+                                <div class="col-md-12 mt-3">
                                     <input type="text" name="suite" class="form-control" placeholder="{{ __('store.checkout.suite') }}">
-                                </div>
-                                <div class="col-md-6 mt-3">
-                                    <select name="country" class="form-select" required>
-                                        <option value="">{{ __('store.checkout.select_country') }}</option>
-                                        <option value="1">United States</option>
-                                        <!-- Dynamically populate -->
-                                    </select>
                                 </div>
                             </div>
                             <div class="row">
@@ -58,8 +52,9 @@
                                 <div class="col-md-3 mt-3">
                                     <select name="state" class="form-select" required>
                                         <option value="">{{ __('store.checkout.select_state') }}</option>
-                                        <option value="1">New York</option>
-                                        <!-- Dynamically populate -->
+                                        @foreach (config('store.provinces') as $code => $provinceName)
+                                            <option value="{{ $code }}">{{ $provinceName }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-3 mt-3">
@@ -90,12 +85,28 @@
                         <div class="shipping_info mt-5">
                             <h3 class="cart-heading">{{ __('store.checkout.payment_method') }}</h3>
 
+                            @php
+                                $defaultGateway = $paymentGateways->firstWhere('code', 'mercadopago')?->code
+                                    ?? $paymentGateways->first()?->code;
+                            @endphp
                             @foreach($paymentGateways as $gateway)
                                 <div class="form-check mt-2">
-                                    <input type="radio" name="gateway" value="{{ $gateway->code }}" 
-                                        id="gateway-{{ $gateway->id }}" required>
-                                    <label for="gateway-{{ $gateway->id }}">{{ $gateway->name }}</label>
+                                    <input type="radio" name="gateway" value="{{ $gateway->code }}"
+                                        id="gateway-{{ $gateway->id }}" required
+                                        @checked($gateway->code === $defaultGateway)>
+                                    <label for="gateway-{{ $gateway->id }}">
+                                        {{ $gateway->name }}
+                                        @if($gateway->code === 'mercadopago')
+                                            <small class="text-muted d-block">{{ __('store.checkout.mercadopago_hint') }}</small>
+                                        @endif
+                                    </label>
                                 </div>
+
+                                @if($gateway->code === 'mercadopago')
+                                    <div id="mercadopago-info" class="alert alert-light border mt-2 small">
+                                        {{ __('store.checkout.mercadopago_info') }}
+                                    </div>
+                                @endif
 
                                 @if($gateway->code === 'paypal')
                                     <div id="paypal-button-container" class="mt-3" style="display: none;"></div>
@@ -125,7 +136,7 @@
 
                         <div class="row border-bottom pb-2 mb-2 mt-4">
                             <div class="col-6 col-md-4">{{ __('store.checkout.subtotal') }}</div>
-                            <div class="col-6 col-md-8 text-end">${{ number_format($subtotal, 2) }}</div>
+                            <div class="col-6 col-md-8 text-end">{{ $currency->symbol }}{{ number_format($subtotal, 2) }}</div>
                         </div>
                         <div class="row border-bottom pb-2 mb-2">
                             <div class="col-4 col-md-4">{{ __('store.checkout.shipping') }}</div>
@@ -133,7 +144,7 @@
                         </div>
                         <div class="row border-bottom pb-2 mb-2">   
                             <div class="col-6 col-md-4">{{ __('store.checkout.total') }}</div>
-                            <div class="col-6 col-md-8 text-end"><span>${{ number_format($total, 2) }}</span></div>
+                            <div class="col-6 col-md-8 text-end"><span>{{ $currency->symbol }}{{ number_format($total, 2) }}</span></div>
                         </div>
 
                         <div class="mt-4">
@@ -145,108 +156,60 @@
             </div>
         </div>
     </div>
-
+    </div>
 
 @endsection
 
 @section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<?php /* ?>
-<script src="https://js.stripe.com/v3/"></script>
-<script>
-document.addEventListener("DOMContentLoaded", async () => {
-    // Fetch keys from backend
-    let response = await fetch("{{ route('stripe.checkout.process') }}");
-    let data = await response.json();
-
-    let stripe = Stripe(data.publicKey);
-    let elements = stripe.elements();
-    let cardElement = elements.create('card');
-    cardElement.mount('#card-element');
-
-    document.querySelector('#checkout-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const {error, paymentIntent} = await stripe.confirmCardPayment(data.clientSecret, {
-            payment_method: {
-                card: cardElement
-            }
-        });
-
-        if (error) {
-            alert(error.message);
-        } else if (paymentIntent.status === 'succeeded') {
-            alert("Payment successful!");
-            window.location.href = "/order/success";
-        }
-    });
-});
-</script>
-
-
-@if($paypalClientId)
-    <script src="https://www.paypal.com/sdk/js?client-id={{ $paypalClientId }}&currency=USD"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            if (typeof paypal !== "undefined") {
-                paypal.Buttons({
-                    createOrder: function(data, actions) {
-                        return actions.order.create({
-                            purchase_units: [{ amount: { value: "{{ $total }}" } }]
-                        });
-                    },
-                    onApprove: function(data, actions) {
-                        return actions.order.capture().then(function(details) {
-                            fetch("{{ route('checkout.process') }}", {
-                                method: "POST",
-                                headers: {"X-CSRF-TOKEN": "{{ csrf_token() }}"},
-                                body: JSON.stringify({
-                                    gateway: "paypal",
-                                    order_id: data.orderID
-                                })
-                            });
-                        });
-                    }
-                }).render('#paypal-button-container');
-            } else {
-                console.error("PayPal SDK not loaded");
-            }
-        });
-    </script>
+@if($paypalClientId && $paypalClientId !== 'your-paypal-client-id')
+<script src="https://www.paypal.com/sdk/js?client-id={{ $paypalClientId }}&currency={{ storeCurrencyCode() }}"></script>
 @endif
-<?php */ ?>
-<script src="https://www.paypal.com/sdk/js?client-id={{ $paypalClientId }}&currency=USD"></script>
+@if($stripePublicKey && $stripePublicKey !== 'your-stripe-public-key')
 <script src="https://js.stripe.com/v3/"></script>
+@endif
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("checkout-form");
     const gatewayRadios = document.querySelectorAll('input[name="gateway"]');
     const paypalContainer = document.getElementById("paypal-button-container");
     const stripeContainer = document.getElementById("card-element");
-    const placeOrderBtn = document.getElementById("place-order");
+    const mpInfo = document.getElementById("mercadopago-info");
+    const successUrl = @json(route('checkout.success'));
 
-    let stripe = Stripe("asdasd");
-    let elements = stripe.elements();
-    let card = elements.create("card");
-    card.mount("#card-element");
+    let stripe = null;
+    let card = null;
+    @if($stripePublicKey && $stripePublicKey !== 'your-stripe-public-key')
+    stripe = Stripe(@json($stripePublicKey));
+    const elements = stripe.elements();
+    card = elements.create("card");
+    if (stripeContainer) {
+        card.mount("#card-element");
+    }
+    @endif
 
-    // Show correct payment fields
+    function togglePaymentUi(gateway) {
+        if (paypalContainer) {
+            paypalContainer.style.display = gateway === "paypal" ? "block" : "none";
+        }
+        if (stripeContainer) {
+            stripeContainer.style.display = gateway === "stripe" ? "block" : "none";
+        }
+        if (mpInfo) {
+            mpInfo.style.display = gateway === "mercadopago" ? "block" : "none";
+        }
+    }
+
     gatewayRadios.forEach(radio => {
         radio.addEventListener("change", function () {
-            if (this.value === "paypal") {
-                paypalContainer.style.display = "block";
-                stripeContainer.style.display = "none";
-            } else if (this.value === "stripe") {
-                stripeContainer.style.display = "block";
-                paypalContainer.style.display = "none";
-            } else {
-                paypalContainer.style.display = "none";
-                stripeContainer.style.display = "none";
-            }
+            togglePaymentUi(this.value);
         });
+        if (radio.checked) {
+            togglePaymentUi(radio.value);
+        }
     });
 
-    // PayPal integration
-    if (typeof paypal !== "undefined") {
+    @if($paypalClientId && $paypalClientId !== 'your-paypal-client-id')
+    if (typeof paypal !== "undefined" && paypalContainer) {
         paypal.Buttons({
             createOrder: function (data, actions) {
                 return actions.order.create({
@@ -254,63 +217,64 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             },
             onApprove: function (data, actions) {
-                return actions.order.capture().then(function (details) {
-                    // Send to backend
-                    fetch("{{ route('checkout.process') }}", {
-                        method: "POST",
-                        headers: {
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            gateway: "paypal",
-                            order_id: data.orderID,
-                            details: details
-                        })
-                    }).then(res => res.json()).then(result => {
-                        window.location.href = "/thank-you";
-                    });
+                return actions.order.capture().then(function () {
+                    window.location.href = @json(route('paypal.success')) + "?token=" + data.orderID;
                 });
             }
         }).render("#paypal-button-container");
     }
+    @endif
 
-    // Stripe integration
-    const form = document.getElementById("checkout-form");
     form.addEventListener("submit", async function (e) {
         e.preventDefault();
 
-        let selectedGateway = document.querySelector('input[name="gateway"]:checked').value;
+        const selected = document.querySelector('input[name="gateway"]:checked');
+        if (!selected) {
+            showStoreToast('error', @json(__('store.checkout.payment_required')));
+            return;
+        }
 
-        if (selectedGateway === "stripe") {
-            const {paymentMethod, error} = await stripe.createPaymentMethod({
-                type: "card",
-                card: card,
-            });
+        const gateway = selected.value;
+        const formData = new FormData(form);
 
+        if (gateway === "paypal") {
+            showStoreToast('info', @json(__('store.checkout.paypal_instructions')));
+            return;
+        }
+
+        if (gateway === "stripe") {
+            if (!stripe || !card) {
+                showStoreToast('error', "Stripe no está configurado.");
+                return;
+            }
+            const {paymentMethod, error} = await stripe.createPaymentMethod({ type: "card", card });
             if (error) {
                 document.getElementById("card-errors").textContent = error.message;
-            } else {
-                // Send paymentMethod.id + form data to backend
-                let formData = new FormData(form);
-                formData.append("payment_method_id", paymentMethod.id);
-
-                fetch("{{ route('checkout.process') }}", {
-                    method: "POST",
-                    headers: {"X-CSRF-TOKEN": "{{ csrf_token() }}"},
-                    body: formData
-                }).then(res => res.json()).then(result => {
-                    window.location.href = "/thank-you";
-                });
+                return;
             }
-        } else if (selectedGateway === "paypal") {
-            alert("Please complete payment with PayPal button");
-        } else {
-            form.submit();
+            formData.append("payment_method_id", paymentMethod.id);
         }
+
+        const response = await fetch(@json(route('checkout.process')), {
+            method: "POST",
+            headers: { "X-CSRF-TOKEN": @json(csrf_token()), "Accept": "application/json" },
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            showStoreToast('error', result.message || @json(__('store.checkout.order_failed')));
+            return;
+        }
+
+        if (result.redirect) {
+            window.location.href = result.redirect;
+            return;
+        }
+
+        window.location.href = successUrl;
     });
 });
 </script>
-
-
 @endsection

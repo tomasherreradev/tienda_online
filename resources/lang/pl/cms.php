@@ -2,7 +2,7 @@
 
 return [
     'auth' => [
-        'velstore' => 'Velstore',
+        'velstore' => 'Tejada Hogar',
         'login' => 'Zaloguj się',
         'email' => 'Adres e-mail',
         'password' => 'Hasło',

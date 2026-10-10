@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
     @if (!App::environment('testing'))
@@ -26,16 +26,36 @@
         @if (!App::environment('testing'))
             @vite(['resources/views/themes/xylo/css/custom.css'])
         @endif
+        @if (!App::environment('testing'))
+            @vite(['resources/views/themes/xylo/css/mobile-store.css'])
+        @endif
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
+        @if (!App::environment('testing'))
+            @vite(['resources/views/themes/xylo/css/store-toast.css'])
+        @endif
     @yield('css')
 </head>
-<body>
+<body class="store-theme auth-store-page">
     @yield('content')
     @if (!App::environment('testing'))
         @vite(['resources/views/themes/xylo/js/app.js'])
     @endif
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        window.__storeToastTitles = {
+            success: @json(__('store.notify.success')),
+            error: @json(__('store.notify.error')),
+            warning: @json(__('store.notify.warning')),
+            info: @json(__('store.notify.info')),
+        };
+    </script>
+    @if (!App::environment('testing'))
+        @vite(['resources/views/themes/xylo/js/store-toast.js'])
+    @endif
+    @include('themes.xylo.partials.flash-toasts')
     @yield('js')
- 
+
 </body>
 </html>

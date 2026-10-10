@@ -1,14 +1,16 @@
 @extends('themes.xylo.layouts.master')
 @section('content')
     @php $currency = activeCurrency(); @endphp
+    <div class="store-page">
     {{-- Banner Section Start --}}
-    <section class="banner-area py-5 animate__animated animate__fadeIn">
+    <section class="banner-area py-4 py-md-5 animate__animated animate__fadeIn">
         <div class="container h-100 banner-slider">
             @foreach ($banners as $banner)
             <div>
                 <div class="row h-100 align-items-center">
                     <div class="col-md-6">
-                        <h1 class="mt-5"><span>{{ $banner->translation ? $banner->translation->title : $banner->title }}</span>
+                        <h1 class="mt-5">
+                            <span class="banner-title-gradient">{{ $banner->translation ? $banner->translation->title : $banner->title }}</span>
                         </h1>
                         <p class="mt-3 mb-4">{{ __('store.home.banner_text') }}</p>
                        <a href="{{ route('shop.index') }}" class="btn btn-primary">{{ __('store.home.shop_now') }}</a>
@@ -52,55 +54,52 @@
         <div class="container position-relative">
             <h1 class="text-start pb-5 sec-heading">{{ __('store.home.trending_products') }}</h1>
 
-            <div class="product-slider">
+            <div class="product-slider store-trending-slider">
                 @foreach ($products as $product)
-                    <div class="product-card">
-                        <div class="product-img">
-                            <img src="{{ Storage::url(optional($product->thumbnail)->image_url ?? 'default.jpg') }}" 
-                                alt="{{ $product->translation->name ?? 'Product Name Not Available' }}">
-                                <button class="wishlist-btn" data-product-id="{{ $product->id }}">
-                                    <i class="fa-solid fa-heart"></i>
-                                </button>
+                    <div class="product-card store-trending-card">
+                        <div class="store-trending-card__media product-img">
+                            <a href="{{ route('product.show', $product->slug) }}" class="store-trending-card__img-link">
+                                <img src="{{ optional($product->thumbnail)->url ?? product_image_url(null) }}"
+                                    alt="{{ $product->translation->name ?? 'Product Name Not Available' }}">
+                            </a>
+                            <button type="button" class="wishlist-btn" data-product-id="{{ $product->id }}" aria-label="{{ __('store.wishlist.title') }}">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
                         </div>
-                        <div class="product-info mt-4">
-                            <div class="top-info">
-                                <div class="reviews">
-                                    <i class="fa-solid fa-star"></i> ({{ $product->reviews_count }} {{ __('store.home.reviews') }})
-                                </div>
-                            </div>
-                            <div class="bottom-info">
-                                <div class="left">
-                                    <h3>
-                                        <a href="{{ route('product.show', $product->slug) }}" class="product-title">
-                                            {{ $product->translation->name ?? 'Product Name Not Available' }}
-                                        </a>
-                                    </h3>
-                                    <p class="price">
-                                        <span class="original {{ optional($product->primaryVariant)->converted_discount_price ? 'has-discount' : '' }}">
-                                            {{ $currency->symbol }}{{ optional($product->primaryVariant)->converted_price ?? 'N/A' }}
-                                        </span>
-
-                                        @if(optional($product->primaryVariant)->converted_discount_price)
-                                            <span class="discount"> 
-                                                {{ $currency->symbol }}{{ $product->primaryVariant->converted_discount_price }}
-                                            </span>
-                                        @endif
-                                    </p>
-                                </div>
-                                <button class="cart-btn" onclick="addToCart({{ $product->id }})">
-                                    <i class="fa fa-shopping-bag"></i>
-                                </button>
-                            </div>
+                        <div class="store-trending-card__body product-info">
+                            <p class="store-trending-card__reviews reviews mb-0">
+                                <i class="fa-solid fa-star" aria-hidden="true"></i>
+                                <span>({{ $product->reviews_count }} {{ __('store.home.reviews') }})</span>
+                            </p>
+                            <h3 class="store-trending-card__title">
+                                <a href="{{ route('product.show', $product->slug) }}" class="product-title">
+                                    {{ $product->translation->name ?? 'Product Name Not Available' }}
+                                </a>
+                            </h3>
+                            <p class="store-trending-card__price price mb-0">
+                                <span class="original {{ optional($product->primaryVariant)->converted_discount_price ? 'has-discount' : '' }}">
+                                    {{ $currency->symbol }}{{ optional($product->primaryVariant)->converted_price ?? 'N/A' }}
+                                </span>
+                                @if(optional($product->primaryVariant)->converted_discount_price)
+                                    <span class="discount">
+                                        {{ $currency->symbol }}{{ $product->primaryVariant->converted_discount_price }}
+                                    </span>
+                                @endif
+                            </p>
+                            <button type="button" class="store-trending-card__cart" onclick="addToCart({{ $product->id }})">
+                                <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
+                                {{ __('store.home.add_to_cart_short') }}
+                            </button>
                         </div>
                     </div>
                 @endforeach
             </div>
 
-            <!-- Custom Arrows -->
-            <div class="custom-arrows">
-                <button class="prev"><i class="fa-solid fa-chevron-left"></i></button>
-                <button class="next"><i class="fa-solid fa-chevron-right"></i></button>
+            <div class="custom-arrows d-none d-md-flex" aria-hidden="true">
+                <button type="button" class="prev" aria-label="{{ __('store.home.slider_prev') }}"><i class="fa-solid fa-chevron-left"></i></button>
+                <button type="button" class="next" aria-label="{{ __('store.home.slider_next') }}"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
+            <p class="store-slider-hint d-md-none text-muted small mb-0 mt-2">{{ __('store.home.slider_swipe_hint') }}</p>
         </div>
     </section>
 
@@ -117,7 +116,7 @@
                 <div class="col-md-3">
                     <div class="product-card">
                         <div class="product-img">
-                            <img src="{{ Storage::url(optional($product->thumbnail)->image_url ?? 'default.jpg') }}" alt="{{ $product->translation->name ?? 'Product Name Not Available' }}">
+                            <img src="{{ optional($product->thumbnail)->url ?? product_image_url(null) }}" alt="{{ $product->translation->name ?? 'Product Name Not Available' }}">
                             <button class="wishlist-btn"><i class="fa-solid fa-heart"></i></button>
                         </div>
                         <div class="product-info mt-4">
@@ -207,9 +206,9 @@
             </div>
         </div>
     </section>
+    </div>
 @endsection
 @section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
         function addToCart(productId) {
 
@@ -226,12 +225,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                toastr.success("{{ session('success') }}", data.message, {
-                    closeButton: true,
-                    progressBar: true,
-                    positionClass: "toast-top-right",
-                    timeOut: 5000
-                });
+                showStoreToast('success', data.message);
                 updateCartCount(data.cart);
             })
             .catch(error => console.error("Error:", error));

@@ -1,9 +1,21 @@
 <?php
 
 return [
+    'notify' => [
+        'success' => '¡Genial!',
+        'error' => 'Algo salió mal',
+        'warning' => 'Atención',
+        'info' => 'Información',
+        'generic_error' => 'Algo salió mal. Por favor, inténtalo de nuevo.',
+    ],
+
     'header' => [
-        'top_bar_message' => 'Envío gratuito en pedidos superiores a $50 | Soporte | Localizador de tiendas',
-        'search_placeholder' => 'Buscar un producto',
+        'top_bar_message' => 'Envío gratuito en pedidos superiores a $50.000 | Soporte | Localizador de tiendas',
+        'top_bar_short' => 'Envío gratis desde $50.000',
+        'search_placeholder' => 'Buscar productos',
+        'open_menu' => 'Abrir menú',
+        'close_menu' => 'Cerrar menú',
+        'logout' => 'Cerrar sesión',
     ],
 
     'footer' => [
@@ -14,9 +26,9 @@ return [
         'privacy_policy' => 'Política de privacidad',
         'terms_of_service' => 'Términos del servicio',
         'follow_us' => 'Síguenos',
-        'footer_logo_alt' => 'Logo de pie de página de Velstore',
-        'copyright' => '© 2025 Demostración de Velstore. Todos los derechos reservados.',
-        'powered_by' => 'Desarrollado por Velstore Labs',
+        'footer_logo_alt' => 'Logo de Tejada Hogar',
+        'copyright' => '© 2025 Tejada Hogar. Todos los derechos reservados.',
+        'powered_by' => 'Tejada Hogar',
     ],
 
     'home' => [
@@ -28,6 +40,10 @@ return [
         'product_name_not_available' => 'Nombre del producto no disponible',
         'featured_products' => 'Productos destacados',
         'view_all' => 'Ver todo',
+        'slider_prev' => 'Anterior',
+        'slider_next' => 'Siguiente',
+        'slider_swipe_hint' => 'Deslizá para ver más',
+        'add_to_cart_short' => 'Agregar al carrito',
         // Why Choose Us section
         'why_choose_us' => '¿Por qué elegirnos?',
         'fast_delivery_title' => 'Entrega rápida',
@@ -105,6 +121,7 @@ return [
         'breadcrumb_cart' => 'Carrito',
 
         // Cart messages
+        'add_error' => 'No se pudo agregar al carrito.',
         'empty_cart' => 'Tu carrito está vacío.',
         'continue_shopping' => 'Seguir comprando',
         'update_cart' => 'Actualizar carrito',
@@ -157,7 +174,8 @@ return [
         'suite' => 'Apartamento / Piso',
         'select_country' => 'Seleccionar país',
         'city' => 'Ciudad',
-        'select_state' => 'Seleccionar estado',
+        'select_state' => 'Seleccionar provincia',
+        'country_fixed' => 'País',
         'zipcode' => 'Código postal',
         'use_as_billing' => 'Usar como dirección de facturación',
 
@@ -183,6 +201,10 @@ return [
         'order_failed' => 'Algo salió mal. Por favor, inténtalo de nuevo.',
         'payment_required' => 'Por favor, selecciona un método de pago antes de continuar.',
         'paypal_instructions' => 'Por favor, completa el pago utilizando el botón de PayPal.',
+        'mercadopago_hint' => 'Tarjetas de crédito y débito argentinas, Mercado Pago y cuotas',
+        'mercadopago_info' => 'Al continuar serás redirigido al checkout seguro de Mercado Pago para pagar en pesos argentinos.',
+        'order_pending' => 'Tu pago está pendiente de acreditación. Te avisaremos cuando se confirme.',
+        'success_message' => 'Gracias por tu compra. Recibirás la confirmación por correo.',
     ],
 
     'profile' => [
@@ -223,12 +245,33 @@ return [
         'add_to_cart' => 'Agregar al carrito',
     ],
 
+    'auth' => [
+        'copyright' => '© 2025 Tejada Hogar. Todos los derechos reservados.',
+    ],
+
+    'password' => [
+        'forgot_title' => 'Recuperá tu acceso',
+        'forgot_lead' => 'Te enviamos un enlace seguro a tu correo para restablecer la contraseña.',
+        'forgot_heading' => '¿Olvidaste tu contraseña?',
+        'forgot_subtitle' => 'Indica el email de tu cuenta y te mandamos las instrucciones.',
+        'reset_title' => 'Nueva contraseña',
+        'reset_lead' => 'Elegí una contraseña segura para volver a comprar con tranquilidad.',
+        'reset_heading' => 'Restablecer contraseña',
+        'reset_subtitle' => 'Completá los datos para confirmar el cambio.',
+        'email' => 'Correo electrónico',
+        'new_password' => 'Nueva contraseña',
+        'confirm_password' => 'Confirmar contraseña',
+        'send_link' => 'Enviar enlace',
+        'reset_btn' => 'Guardar contraseña',
+        'back_login' => 'Volver a iniciar sesión',
+    ],
+
     'register' => [
         'hello' => 'Bienvenido',
-        'theme_name' => 'Xylo-Theme 👋 Plataforma Xylo',
+        'theme_name' => '',
         'signup_now' => 'Crea tu cuenta de cliente',
-        'signup_description' => 'Regístrate para comenzar a comprar, rastrear tus pedidos, guardar tus favoritos y acceder a ofertas exclusivas.',
-        'copyright' => '© 2025 Xylo-Theme. Todos los derechos reservados.',
+        'signup_description' => 'Regístrate para comprar, seguir pedidos y guardar favoritos en Tejada Hogar.',
+        'copyright' => '© 2025 Tejada Hogar. Todos los derechos reservados.',
         'welcome_back' => 'Comencemos',
         'form_subtitle' => 'Ingresa tus datos para crear tu cuenta de compra.',
         'name' => 'Nombre completo',
@@ -242,10 +285,10 @@ return [
 
     'login' => [
         'hello' => 'Bienvenido de nuevo',
-        'theme_name' => 'Xylo-Theme 👋 Plataforma Xylo',
+        'theme_name' => '',
         'login_now' => 'Inicia sesión en tu cuenta',
         'login_description' => 'Accede a tu cuenta para gestionar pedidos, guardar favoritos y disfrutar de una experiencia de compra personalizada.',
-        'copyright' => '© 2025 Xylo-Theme. Todos los derechos reservados.',
+        'copyright' => '© 2025 Tejada Hogar. Todos los derechos reservados.',
         'welcome_back' => 'Nos alegra verte otra vez',
         'form_subtitle' => 'Introduce tus datos de acceso para continuar.',
         'email' => 'Correo electrónico',

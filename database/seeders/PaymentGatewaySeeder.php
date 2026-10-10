@@ -70,5 +70,38 @@ class PaymentGatewaySeeder extends Seeder
                 'updated_at' => now(),
             ],
         ]);
+
+        // ---- Mercado Pago ----
+        $mpId = DB::table('payment_gateways')->insertGetId([
+            'name' => 'Mercado Pago',
+            'code' => 'mercadopago',
+            'description' => 'Tarjetas argentinas y billetera Mercado Pago',
+            'is_active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        foreach (['sandbox', 'live'] as $env) {
+            DB::table('payment_gateway_configs')->insert([
+                [
+                    'gateway_id' => $mpId,
+                    'key_name' => 'access_token',
+                    'key_value' => env('MERCADOPAGO_ACCESS_TOKEN', 'your-mercadopago-access-token'),
+                    'is_encrypted' => true,
+                    'environment' => $env,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'gateway_id' => $mpId,
+                    'key_name' => 'public_key',
+                    'key_value' => env('MERCADOPAGO_PUBLIC_KEY', 'your-mercadopago-public-key'),
+                    'is_encrypted' => false,
+                    'environment' => $env,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]);
+        }
     }
 }

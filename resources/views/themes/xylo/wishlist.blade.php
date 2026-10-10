@@ -15,7 +15,7 @@
                     <div class="product-card">
 
                         <div class="product-img position-relative">
-                            <img src="{{ Storage::url(optional($product->thumbnail)->image_url ?? 'default.jpg') }}"
+                            <img src="{{ optional($product->thumbnail)->url ?? product_image_url(null) }}"
                                  alt="{{ $product->translation->name }}" style="object-fit: contain; width: 100%; height: 250px;">
 
                             <!-- Same wishlist heart like homepage -->
@@ -95,13 +95,13 @@ function addToCart(productId) {
         },
         success: function(res) {
             if (res.status === 'success') {
-                toastr.success(res.message);
+                showStoreToast('success', res.message);
             } else {
-                toastr.success(res.message);
+                showStoreToast('success', res.message);
             }
         },
         error: function() {
-            toastr.error("Error adding to cart");
+            showStoreToast('error', @json(__('store.cart.add_error')));
         }
     });
 }

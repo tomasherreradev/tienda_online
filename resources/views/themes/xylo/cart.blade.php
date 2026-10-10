@@ -4,17 +4,19 @@
 @endsection
 @section('content')
     @php $currency = activeCurrency(); @endphp
-    <section class="breadcrumb-section">
+    <div class="store-page cart-page pb-5">
+    <section class="store-page-hero">
         <div class="container">
-            <div class="breadcrumbs" aria-label="breadcrumb">
+            <nav class="store-breadcrumbs" aria-label="breadcrumb">
                 <a href="{{ url('/') }}">{{ __('store.cart.breadcrumb_home') }}</a>
                 <i class="fa fa-angle-right"></i>
                 <span>{{ __('store.cart.breadcrumb_cart') }}</span>
-            </div>
+            </nav>
+            <h1>{{ __('store.cart.breadcrumb_cart') }}</h1>
         </div>
     </section>
     @php $total = 0; @endphp
-    <div class="cart-page pb-5 pt-5">
+    <div class="pt-3">
     <div class="container">
         <div class="row">
             <div class="col-md-9">
@@ -37,10 +39,22 @@
                         <tbody>
     @foreach ($cart as $key => $item)
         @php
-            $product = \App\Models\Product::with(['translations', 'thumbnail'])->find($item['product_id']);
-            $variant = isset($item['variant_id'])
-                        ? \App\Models\ProductVariant::with('images')->find($item['variant_id'])
-                        : \App\Models\ProductVariant::where('product_id', $item['product_id'])->where('is_primary', true)->first();
+            $product = \App\Models\Product::with(['translation', 'thumbnail'])->find($item['product_id']);
+            $variant = null;
+            if (! empty($item['variant_id'])) {
+                $variant = \App\Models\ProductVariant::with('images')->find($item['variant_id']);
+            }
+            if (! $variant && $product) {
+                $variant = $product->variants()->where('is_primary', true)->first();
+            }
+
+            $cartImage = $variant?->images?->first() ?? $product?->thumbnail;
+            $cartImageUrl = $item['image'] ?? null
+                ? product_image_url($item['image'])
+                : (optional($cartImage)->url ?? product_image_url(null));
+            $cartLineName = $item['variant_name']
+                ?? $product?->translation?->name
+                ?? __('store.home.product_name_not_available');
 
             $subtotal = $item['price'] * $item['quantity'];
         @endphp
@@ -52,9 +66,8 @@
             </td>
             <td>
                 <div class="pr-imghead">
-                    <img src="{{ Storage::url(optional($variant->images->first() ?? $product->thumbnail)->image_url ?? 'default.jpg') }}" 
-                         alt="{{ $variant->name ?? $product->translation->name }}">
-                    <p>{{ $variant->name ?? $product->translation->name }}</p>
+                    <img src="{{ $cartImageUrl }}" alt="{{ $cartLineName }}">
+                    <p>{{ $cartLineName }}</p>
                 </div>
                 
                 <div id="size-color-wrapper">
@@ -185,11 +198,11 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
+    </div>
 @endsection
 
 @section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
     $(document).ready(function() {
         $('.update-cart').click(function(e) {
@@ -238,12 +251,7 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    toastr.success("{{ session('success') }}", data.message, {
-                        closeButton: true,
-                        progressBar: true,
-                        positionClass: "toast-top-right",
-                        timeOut: 5000
-                    });
+                    showStoreToast('success', data.message);
                     location.reload();
                 });
             });
@@ -266,12 +274,11 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .then(response => response.json())
         .then(data => {
-            toastr.success(data.message, "Applied", {
-                closeButton: true,
-                progressBar: true,
-                positionClass: "toast-top-right",
-                timeOut: 5000
-            });
+            if (data.success) {
+                showStoreToast('success', data.message);
+            } else {
+                showStoreToast('error', data.message);
+            }
             setTimeout(() => {
                 if (data.success) location.reload();
             }, 1000);
@@ -289,13 +296,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .then(response => response.json())
         .then(data => {
-            toastr.success(data.message, "Removed", {
-                closeButton: true,
-                progressBar: true,
-                positionClass: "toast-top-right",
-                timeOut: 5000
-            });
-            
+            showStoreToast('success', data.message);
             setTimeout(() => {
                 if (data.success) location.reload();
             }, 1000);

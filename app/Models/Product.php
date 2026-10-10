@@ -41,7 +41,7 @@ class Product extends Model
     // One-to-many relationship with ProductImage
     public function images()
     {
-        return $this->hasMany(ProductImage::class);
+        return $this->hasMany(ProductImage::class)->orderByDesc('id');
     }
 
     /**
@@ -66,7 +66,9 @@ class Product extends Model
 
     public function thumbnail()
     {
-        return $this->hasOne(ProductImage::class)->where('type', 'thumb');
+        return $this->hasOne(ProductImage::class)
+            ->where('type', 'thumb')
+            ->latestOfMany();
     }
 
     public function reviews()

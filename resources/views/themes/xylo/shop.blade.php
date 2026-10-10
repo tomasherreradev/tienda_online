@@ -71,8 +71,6 @@
 @endsection
 
 @section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
 <script>
     const minSlider = document.getElementById('minPrice');
     const maxSlider = document.getElementById('maxPrice');
@@ -156,12 +154,7 @@ function addToCart(productId) {
     })
     .then(response => response.json())
     .then(data => {
-        toastr.success("{{ session('success') }}", data.message, {
-            closeButton: true,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            timeOut: 5000
-        });
+        showStoreToast('success', data.message);
         updateCartCount(data.cart);
     })
     .catch(error => console.error("Error:", error));

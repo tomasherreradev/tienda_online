@@ -1,7 +1,7 @@
 {
     "name": "velstorelabs/velstore",
     "type": "project",
-    "description": "Velstore - A multi-vendor, multi-lingual Laravel eCommerce boilerplate.",
+    "description": "Tejada Hogar - Laravel eCommerce store.",
     "keywords": ["laravel", "ecommerce", "boilerplate", "multi-vendor", "multilingual"],
     "license": "MIT",
     "require": {
@@ -31,7 +31,9 @@
         },
         "files": [
             "app/Helpers/cms_translate.php",
-            "app/Helpers/currency.php"
+            "app/Helpers/currency.php",
+            "app/Helpers/media.php",
+            "app/Helpers/http_client.php"
         ]
     },
     "autoload-dev": {

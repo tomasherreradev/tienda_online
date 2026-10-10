@@ -38,7 +38,7 @@ class PaymentSeeder extends Seeder
             'user_id' => $user->id,
             'gateway_id' => $gateway->id,
             'amount' => 100.00,
-            'currency' => 'USD',
+            'currency' => 'ARS',
             'status' => 'completed',
             'transaction_id' => Str::uuid(),
             'response' => ['message' => 'Payment successful'],

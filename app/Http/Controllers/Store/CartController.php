@@ -61,7 +61,7 @@ class CartController extends Controller
                 'variant_name' => $variant->name ?? $product->translation->name,
                 'price' => $variant->converted_discount_price ?? $variant->converted_price,
                 'quantity' => $quantity,
-                'image' => optional($variant->images->first() ?? $product->thumbnail)->image_url,
+                'image' => optional($variant->images->first() ?? $product->thumbnail)->image_url ?? null,
                 'attributes' => $attributePairs,
             ];
         }
@@ -118,9 +118,25 @@ class CartController extends Controller
 
     public function viewCart()
     {
-        $cart = Session::get('cart', []);
+        $cart = $this->sanitizeCart(Session::get('cart', []));
+        Session::put('cart', $cart);
+        Session::put('cart_count', array_sum(array_column($cart, 'quantity')));
 
         return view('themes.xylo.cart', compact('cart'));
+    }
+
+    /**
+     * Elimina líneas del carrito cuyo producto ya no existe.
+     */
+    private function sanitizeCart(array $cart): array
+    {
+        foreach ($cart as $key => $item) {
+            if (! Product::whereKey($item['product_id'] ?? null)->exists()) {
+                unset($cart[$key]);
+            }
+        }
+
+        return $cart;
     }
 
     public function removeFromCart(Request $request)

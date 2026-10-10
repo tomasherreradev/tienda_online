@@ -23,34 +23,7 @@
     <div id="content" class="w-100">
         <nav class="navbar navbar-expand navbar-light bg-light p-3">
             <button class="btn btn-dark" id="sidebarToggle"><i class="fas fa-bars"></i></button>
-            <!-- Language Change Dropdown -->
-            <div class="dropdown ms-auto me-3">
-                <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">
-                    <img src="https://flagcdn.com/w40/us.png" width="20"> English
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item language-select {{ app()->getLocale() == 'en' ? 'active' : '' }}" data-lang="en" href="#"><img src="https://flagcdn.com/w40/us.png" width="20">{{ __('cms.languages.english') }}</a></li>
-                    <li><a class="dropdown-item language-select " data-lang="es" href="#"><img src="https://flagcdn.com/w40/es.png" width="20"> {{ __('cms.languages.spanish') }}</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="fr" href="#"><img src="https://flagcdn.com/w40/fr.png" width="20"> French</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="ar" href="#"><img src="https://flagcdn.com/w40/sa.png" width="20"> Arabic</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="de" href="#"><img src="https://flagcdn.com/w40/de.png" width="20"> German</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="fa" href="#"><img src="https://flagcdn.com/w40/ir.png" width="20"> Persian (Farsi)</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="hi" href="#"><img src="https://flagcdn.com/w40/in.png" width="20"> Hindi</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="id" href="#"><img src="https://flagcdn.com/w40/id.png" width="20"> Indonesian</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="it" href="#"><img src="https://flagcdn.com/w40/it.png" width="20"> Italian</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="ja" href="#"><img src="https://flagcdn.com/w40/jp.png" width="20"> Japanese</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="ko" href="#"><img src="https://flagcdn.com/w40/kr.png" width="20"> Korean</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="nl" href="#"><img src="https://flagcdn.com/w40/nl.png" width="20"> Dutch</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="pl" href="#"><img src="https://flagcdn.com/w40/pl.png" width="20"> Polish</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="pt" href="#"><img src="https://flagcdn.com/w40/pt.png" width="20"> Portuguese</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="ru" href="#"><img src="https://flagcdn.com/w40/ru.png" width="20"> Russian</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="th" href="#"><img src="https://flagcdn.com/w40/th.png" width="20"> Thai</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="tr" href="#"><img src="https://flagcdn.com/w40/tr.png" width="20"> Turkish</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="vi" href="#"><img src="https://flagcdn.com/w40/vn.png" width="20"> Vietnamese</a></li>
-                    <li><a class="dropdown-item language-select" data-lang="zh" href="#"><img src="https://flagcdn.com/w40/cn.png" width="20"> Chinese</a></li>
-                </ul>
-            </div>
-            <div class="dropdown">
+            <div class="dropdown ms-auto">
                 <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">
                     @php
                         $vendor = Auth::guard('vendor')->user();
@@ -82,24 +55,6 @@
         </div>
     </div>
 
-    <!-- Modal for Confirmation -->
-    <div class="modal fade" id="languageChangeModal" tabindex="-1" aria-labelledby="languageChangeModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="languageChangeModalLabel">Change Language</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to change the language?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" id="confirmChange" class="btn btn-primary">Yes, Change</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @if (!App::environment('testing'))
@@ -143,28 +98,6 @@
                         }
                     }
                 });
-            });
-        });
-    </script>
-    <script>
-        $(document).on('click', '.language-select', function (e) {
-            e.preventDefault();
-
-            let lang = $(this).data('lang');
-
-            $.ajax({
-                url: "{{ route('vendor.change.language') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    lang: lang
-                },
-                success: function () {
-                    location.reload(); // reload to apply translations
-                },
-                error: function () {
-                    toastr.error("Failed to change language");
-                }
             });
         });
     </script>

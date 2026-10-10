@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => 'स्वागत है',
-        'theme_name' => '👋 Xylo-Theme',
+        'theme_name' => '👋 Tejada Hogar',
         'signup_now' => 'अपना ग्राहक खाता बनाएँ',
         'signup_description' => 'खरीदारी शुरू करने, अपने ऑर्डर ट्रैक करने, पसंदीदा उत्पाद सहेजने और विशेष ऑफ़र प्राप्त करने के लिए रजिस्टर करें।',
-        'copyright' => '© 2025 Xylo-Theme. सर्वाधिकार सुरक्षित।',
+        'copyright' => '© 2025 Tejada Hogar. सर्वाधिकार सुरक्षित।',
         'welcome_back' => 'चलिए शुरू करते हैं',
         'form_subtitle' => 'अपना शॉपिंग अकाउंट बनाने के लिए जानकारी भरें।',
         'name' => 'पूरा नाम',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => 'वापसी पर स्वागत है',
-        'theme_name' => '👋 Xylo-Theme',
+        'theme_name' => '👋 Tejada Hogar',
         'login_now' => 'अपने खाते में लॉगिन करें',
         'login_description' => 'अपने ऑर्डर, विशलिस्ट और व्यक्तिगत खरीदारी अनुभव के लिए अपने खाते तक पहुँचें।',
-        'copyright' => '© 2025 Xylo-Theme. सर्वाधिकार सुरक्षित।',
+        'copyright' => '© 2025 Tejada Hogar. सर्वाधिकार सुरक्षित।',
         'welcome_back' => 'आपको फिर से देखकर अच्छा लगा',
         'form_subtitle' => 'जारी रखने के लिए कृपया अपने लॉगिन विवरण दर्ज करें।',
         'email' => 'ईमेल पता',

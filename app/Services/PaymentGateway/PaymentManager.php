@@ -29,7 +29,7 @@ class PaymentManager
         $services = [
             'paypal' => PayPalService::class,
             'stripe' => StripeService::class,
-            // 'razorpay' => RazorpayService::class,
+            'mercadopago' => MercadoPagoService::class,
         ];
 
         if (! array_key_exists($gatewayCode, $services)) {

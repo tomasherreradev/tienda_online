@@ -11,7 +11,7 @@
                 @foreach($products as $product)
                     <div class="col-md-3">
                         <div class="card">
-                            <img src="{{ Storage::url(optional($product->thumbnail)->image_url ?? 'default-thumbnail.jpg') }}" class="card-img-top" alt="{{ $product->translations->first()->name ?? 'Product' }}">
+                            <img src="{{ optional($product->thumbnail)->url ?? product_image_url(null) }}" class="card-img-top" alt="{{ $product->translations->first()->name ?? 'Product' }}">
                             <div class="card-body">
                                 <h5 class="card-title">
                                     <a href="{{ url('/product/' . $product->slug) }}">

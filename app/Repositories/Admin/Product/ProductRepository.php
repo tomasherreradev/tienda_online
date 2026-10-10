@@ -38,7 +38,7 @@ class ProductRepository implements ProductRepositoryInterface
             $skuCounter++;
         }
 
-        $defaultCurrencyCode = getWebConfig('default_currency', 'USD');
+        $defaultCurrencyCode = getWebConfig('default_currency', storeCurrencyCode());
 
         $shop = Shop::where('vendor_id', 1)->first();
 

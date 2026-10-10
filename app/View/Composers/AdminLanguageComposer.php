@@ -16,7 +16,9 @@ class AdminLanguageComposer
         }
 
         if (Schema::hasTable('languages')) {
-            $activeLanguages = Language::where('active', 1)->get();
+            $activeLanguages = Language::where('active', 1)
+                ->where('code', storeLocale())
+                ->get();
             $view->with('activeLanguages', $activeLanguages);
         }
     }

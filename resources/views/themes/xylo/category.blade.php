@@ -40,7 +40,7 @@
                 <div class="product-card">
                     <div class="product-img">
                         <a href="{{ route('product.show', $product->slug) }}">
-                            <img src="{{ Storage::url(optional($product->thumbnail)->image_url ?? 'default.jpg') }}"
+                            <img src="{{ optional($product->thumbnail)->url ?? product_image_url(null) }}"
                                  alt="{{ $product->translation->name ?? 'Product Name' }}">
                         </a>
                         <button class="wishlist-btn" data-product-id="{{ $product->id }}">
@@ -108,7 +108,7 @@
         })
         .then(response => response.json())
         .then(data => {
-            toastr.success(data.message || "Added to cart successfully!");
+            showStoreToast('success', data.message || @json(__('store.shop.added_to_cart')));
             updateCartCount(data.cart);
         })
         .catch(error => console.error("Error:", error));

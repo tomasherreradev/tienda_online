@@ -14,9 +14,9 @@ return [
         'privacy_policy' => 'Политика конфиденциальности',
         'terms_of_service' => 'Условия обслуживания',
         'follow_us' => 'Подписывайтесь на нас',
-        'footer_logo_alt' => 'Логотип подвала Velstore',
-        'copyright' => '© 2025 Velstore Demo. Все права защищены.',
-        'powered_by' => 'Разработано Velstore Labs',
+        'footer_logo_alt' => 'Логотип подвала Tejada Hogar',
+        'copyright' => '© 2025 Tejada Hogar Demo. Все права защищены.',
+        'powered_by' => 'Разработано Tejada Hogar Labs',
     ],
 
     'home' => [
@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => 'Добро пожаловать',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Tejada Hogar 👋',
         'signup_now' => 'Создать учетную запись клиента',
         'signup_description' => 'Зарегистрируйтесь, чтобы начать покупки, отслеживать заказы, сохранять избранное и получать эксклюзивные предложения.',
-        'copyright' => '© 2025 Xylo-Theme. Все права защищены.',
+        'copyright' => '© 2025 Tejada Hogar. Все права защищены.',
         'welcome_back' => 'Давайте начнём',
         'form_subtitle' => 'Введите ваши данные, чтобы создать учётную запись.',
         'name' => 'Полное имя',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => 'С возвращением',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Tejada Hogar 👋',
         'login_now' => 'Войдите в свой аккаунт',
         'login_description' => 'Войдите, чтобы управлять заказами, списком желаний и пользоваться персонализированным сервисом.',
-        'copyright' => '© 2025 Xylo-Theme. Все права защищены.',
+        'copyright' => '© 2025 Tejada Hogar. Все права защищены.',
         'welcome_back' => 'Рады снова вас видеть',
         'form_subtitle' => 'Введите ваши данные для входа, чтобы продолжить.',
         'email' => 'Адрес электронной почты',

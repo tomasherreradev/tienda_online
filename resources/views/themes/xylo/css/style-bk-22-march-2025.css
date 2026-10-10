@@ -747,7 +747,7 @@ header {
 }
 
 .feature-icon {
-    background: linear-gradient(to right, #6d3faa, #d08dc3);
+    background: #3BB3C3;
     display: inline-flex;
     align-items: center;
     justify-content: center;

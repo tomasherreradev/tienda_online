@@ -18,7 +18,10 @@ class BrandSeeder extends Seeder
 
         $logoPath = 'brands/logo-ready.png';
         if (! Storage::disk('public')->exists($logoPath)) {
-            Storage::disk('public')->put($logoPath, file_get_contents('https://i.postimg.cc/vH39NxBy/velstore-logo-removebg-preview.png'));
+            $localLogo = public_path('assets/logotipos/logo.png');
+            if (is_readable($localLogo)) {
+                Storage::disk('public')->put($logoPath, file_get_contents($localLogo));
+            }
         }
 
         $brandId = DB::table('brands')->insertGetId([

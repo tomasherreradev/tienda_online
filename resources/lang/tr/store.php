@@ -14,9 +14,9 @@ return [
         'privacy_policy' => 'Gizlilik Politikası',
         'terms_of_service' => 'Hizmet Şartları',
         'follow_us' => 'Bizi Takip Et',
-        'footer_logo_alt' => 'Velstore Alt Bilgi Logo',
-        'copyright' => '© 2025 Velstore Demo. Tüm hakları saklıdır.',
-        'powered_by' => 'Velstore Labs tarafından sağlanmaktadır',
+        'footer_logo_alt' => 'Tejada Hogar Alt Bilgi Logo',
+        'copyright' => '© 2025 Tejada Hogar Demo. Tüm hakları saklıdır.',
+        'powered_by' => 'Tejada Hogar Labs tarafından sağlanmaktadır',
     ],
 
     'home' => [
@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => 'Hoş Geldiniz',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Tejada Hogar 👋',
         'signup_now' => 'Müşteri Hesabı Oluşturun',
         'signup_description' => 'Alışverişe başlamak, siparişlerinizi takip etmek, favorilerinizi kaydetmek ve özel fırsatlara erişmek için kaydolun.',
-        'copyright' => '© 2025 Xylo-Theme. Tüm hakları saklıdır.',
+        'copyright' => '© 2025 Tejada Hogar. Tüm hakları saklıdır.',
         'welcome_back' => 'Hadi Başlayalım',
         'form_subtitle' => 'Alışveriş hesabınızı oluşturmak için bilgilerinizi girin.',
         'name' => 'Ad Soyad',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => 'Tekrar Hoş Geldiniz',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Tejada Hogar 👋',
         'login_now' => 'Hesabınıza Giriş Yapın',
         'login_description' => 'Siparişlerinizi yönetmek, istek listenizi görüntülemek ve kişiselleştirilmiş alışveriş deneyiminin keyfini çıkarmak için giriş yapın.',
-        'copyright' => '© 2025 Xylo-Theme. Tüm hakları saklıdır.',
+        'copyright' => '© 2025 Tejada Hogar. Tüm hakları saklıdır.',
         'welcome_back' => 'Sizi tekrar görmek güzel',
         'form_subtitle' => 'Devam etmek için giriş bilgilerinizi girin.',
         'email' => 'E-posta Adresi',

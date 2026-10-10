@@ -14,9 +14,9 @@ return [
         'privacy_policy' => 'Política de Privacidade',
         'terms_of_service' => 'Termos de Serviço',
         'follow_us' => 'Siga-nos',
-        'footer_logo_alt' => 'Logo do Rodapé Velstore',
-        'copyright' => '© 2025 Velstore Demo. Todos os direitos reservados.',
-        'powered_by' => 'Desenvolvido por Velstore Labs',
+        'footer_logo_alt' => 'Logo do Rodapé Tejada Hogar',
+        'copyright' => '© 2025 Tejada Hogar Demo. Todos os direitos reservados.',
+        'powered_by' => 'Desenvolvido por Tejada Hogar Labs',
     ],
 
     'home' => [
@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => 'Bem-vindo',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Tejada Hogar 👋',
         'signup_now' => 'Crie a sua conta de cliente',
         'signup_description' => 'Registe-se para começar a comprar, acompanhar as suas encomendas, guardar os seus favoritos e aceder a ofertas exclusivas.',
-        'copyright' => '© 2025 Xylo-Theme. Todos os direitos reservados.',
+        'copyright' => '© 2025 Tejada Hogar. Todos os direitos reservados.',
         'welcome_back' => 'Vamos começar',
         'form_subtitle' => 'Introduza os seus dados para criar a sua conta.',
         'name' => 'Nome Completo',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => 'Bem-vindo de volta',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Tejada Hogar 👋',
         'login_now' => 'Inicie sessão na sua conta',
         'login_description' => 'Aceda à sua conta para gerir encomendas, lista de desejos e desfrutar de uma experiência de compras personalizada.',
-        'copyright' => '© 2025 Xylo-Theme. Todos os direitos reservados.',
+        'copyright' => '© 2025 Tejada Hogar. Todos os direitos reservados.',
         'welcome_back' => 'Que bom vê-lo novamente',
         'form_subtitle' => 'Introduza os seus dados de acesso para continuar.',
         'email' => 'Endereço de Email',

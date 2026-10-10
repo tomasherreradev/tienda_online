@@ -86,9 +86,9 @@ class DataImport extends Command
         );
 
         StoreSetting::insert([
-            ['key' => 'default_currency', 'value' => 'USD'],
-            ['key' => 'meta_title', 'value' => 'Welcome to Velstore - Your Laravel eCommerce Journey Begins!'],
-            ['key' => 'meta_description', 'value' => 'Welcome to Velstore! You have successfully installed the ultimate Laravel eCommerce boilerplate. Set up your store, configure settings, and start selling with a powerful multi-vendor, multilingual platform.'],
+            ['key' => 'default_currency', 'value' => 'ARS'],
+            ['key' => 'meta_title', 'value' => 'Bienvenido a Tejada Hogar'],
+            ['key' => 'meta_description', 'value' => 'Tu tienda en línea en pesos argentinos.'],
             ['key' => 'phone_number', 'value' => '+1 234 567 890'],
         ]);
     }

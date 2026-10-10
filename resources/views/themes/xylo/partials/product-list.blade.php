@@ -3,7 +3,7 @@
 <div class="col-6 col-md-4">
     <div class="product-card">
         <div class="product-img">
-            <img src="{{ Storage::url(optional($product->thumbnail)->image_url ?? 'default.jpg') }}" 
+            <img src="{{ optional($product->thumbnail)->url ?? product_image_url(null) }}" 
                  alt="{{ $product->translation->title ?? 'Product Name Not Available' }}">
             <button class="wishlist-btn"><i class="fa-solid fa-heart"></i></button>
         </div>

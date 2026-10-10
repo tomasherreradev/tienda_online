@@ -26,10 +26,16 @@
         @if (!App::environment('testing'))
             @vite(['resources/views/themes/xylo/css/custom.css'])
         @endif
+        @if (!App::environment('testing'))
+            @vite(['resources/views/themes/xylo/css/mobile-store.css'])
+        @endif
     @yield('css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
+    @if (!App::environment('testing'))
+        @vite(['resources/views/themes/xylo/css/store-toast.css'])
+    @endif
 </head>
-<body>
+<body class="store-theme">
     @include('themes.xylo.layouts.header')
     @yield('content')
     @include('themes.xylo.layouts.footer')
@@ -44,8 +50,23 @@
     @if (!App::environment('testing'))
         @vite(['resources/views/themes/xylo/js/main.js'])
     @endif
+    @if (!App::environment('testing'))
+        @vite(['resources/views/themes/xylo/js/mobile-nav.js'])
+    @endif
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @yield('js')
+    <script>
+        window.__storeToastTitles = {
+            success: @json(__('store.notify.success')),
+            error: @json(__('store.notify.error')),
+            warning: @json(__('store.notify.warning')),
+            info: @json(__('store.notify.info')),
+        };
+    </script>
+    @if (!App::environment('testing'))
+        @vite(['resources/views/themes/xylo/js/store-toast.js'])
+    @endif
+    @include('themes.xylo.partials.flash-toasts')
     <script>
         $(document).ready(function () {
             $('.category-slider').slick({
@@ -68,12 +89,10 @@
                         breakpoint: 768,
                         settings: {
                             slidesToShow: 1,
-                        }
-                    },
-                    {
-                        breakpoint: 480,
-                        settings: {
-                            slidesToShow: 1,
+                            slidesToScroll: 1,
+                            centerMode: true,
+                            centerPadding: '28px',
+                            arrows: false,
                         }
                     }
                 ]
@@ -89,36 +108,38 @@
                 dots: true,
                 arrows: false,
             });
-            $('.product-slider').slick({
-                slidesToShow: 4,
-                slidesToScroll: 1,
-                infinite: true,
-                autoplay: true,
-                autoplaySpeed: 3000,
-                arrows: true,
-                prevArrow: $('.prev'),
-                nextArrow: $('.next'),
-                responsive: [
-                    {
-                        breakpoint: 1024,
-                        settings: {
-                            slidesToShow: 3,
+            var $trendingSlider = $('.trending-products .store-trending-slider');
+            if ($trendingSlider.length) {
+                $trendingSlider.slick({
+                    slidesToShow: 4,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    autoplay: true,
+                    autoplaySpeed: 3000,
+                    arrows: true,
+                    prevArrow: $('.trending-products .custom-arrows .prev'),
+                    nextArrow: $('.trending-products .custom-arrows .next'),
+                    responsive: [
+                        {
+                            breakpoint: 1024,
+                            settings: {
+                                slidesToShow: 3,
+                            }
+                        },
+                        {
+                            breakpoint: 768,
+                            settings: {
+                                slidesToShow: 1,
+                                slidesToScroll: 1,
+                                infinite: true,
+                                autoplay: false,
+                                arrows: false,
+                                adaptiveHeight: true,
+                            }
                         }
-                    },
-                    {
-                        breakpoint: 768,
-                        settings: {
-                            slidesToShow: 2,
-                        }
-                    },
-                    {
-                        breakpoint: 480,
-                        settings: {
-                            slidesToShow: 1,
-                        }
-                    }
-                ]
-            });
+                    ]
+                });
+            }
         });
     </script>
     <script>

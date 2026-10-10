@@ -1,141 +1,120 @@
-<header>
+@php
+    $wishlistCount = 0;
+    if (auth('customer')->check()) {
+        $wishlistCount = auth('customer')->user()->wishlistProducts()->count();
+    }
+    $cartCount = session('cart') ? collect(session('cart'))->sum('quantity') : 0;
+@endphp
 
-     {{--  Wishlist Count --}}
-    @php
-        $wishlistCount = 0;
-        if (auth('customer')->check()) {
-            $wishlistCount = auth('customer')->user()->wishlistProducts()->count();
-        }
-    @endphp
-
-    <div class="top-bar w-100 bg-light py-1 header-top-bar">
-        <div class="text-center small">
-            {{ __('store.header.top_bar_message') }} 
-        </div>
-    </div>  
-
-    <div class="container py-3">
-        <!-- Row 2: Logo Left / Search Right -->
-        <div class="row align-items-center">
-            <div class="col-md-4 col-6">
-                <a href="{{ route('xylo.home') }}" class="navbar-brand">
-                    <img src="https://i.ibb.co/dHx2ZR3/velstore.png" width="80" alt="Logo" />
-                </a>
-            </div>
-            <div class="col-md-8 col-6 text-end">
-                <form class="d-flex justify-content-end" action="{{ url('/search') }}" method="GET">
-                    <div class="input-group search-input-width">
-                        <input type="text" class="form-control" id="search-input"  name="q" placeholder="{{ __('store.header.search_placeholder') }}">
-                        <button type="submit" class="btn btn-outline-secondary search-style"><i class="fa fa-search"></i></button>
-                        <div id="search-suggestions" class="dropdown-menu show w-100 mt-5 d-none"></div>
-                    </div>
-                </form>
-            </div>
-        </div>
+<header class="store-header">
+    <div class="store-topbar d-none d-md-block">
+        {{ __('store.header.top_bar_message') }}
+    </div>
+    <div class="store-topbar d-md-none">
+        {{ __('store.header.top_bar_short') }}
     </div>
 
-    <div class="container py-3">
-        <!-- Row 3: Menu Left / Actions Right -->
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <nav>
-                    <ul class="nav">
-                        @if ($headerMenu && $headerMenu->menuItems->count())
-                            @foreach ($headerMenu->menuItems as $menuItem)
-                                <li class="nav-item">
-                                    <a class="nav-link menu-text-color" href="{{ url($menuItem->slug) }}">
-                                        {{ $menuItem->translation->title ?? 'No Translation' }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        @endif
-                    </ul>
-                </nav>
-            </div>
+    <div class="store-header__bar">
+        <button type="button" class="store-menu-toggle d-lg-none" id="store-menu-open" aria-label="{{ __('store.header.open_menu') }}">
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
-            <div class="col-md-4 d-flex justify-content-end align-items-center gap-3">
-                <!-- Language Selector -->
-                <form action="{{ route('change.store.language') }}" method="POST">
-                    @csrf
-                    <select name="lang" class="form-select form-select-sm font-style" onchange="this.form.submit()">
-                        <option value="en" {{ app()->getLocale() == 'en' ? 'selected' : '' }}>EN</option>
-                        <option value="fr" {{ app()->getLocale() == 'fr' ? 'selected' : '' }}>FR</option>
-                        <option value="es" {{ app()->getLocale() == 'es' ? 'selected' : '' }}>ES</option>
-                        <option value="de" {{ app()->getLocale() == 'de' ? 'selected' : '' }}>DE</option>
-                    </select>
-                </form>
+        <a href="{{ route('xylo.home') }}" class="store-logo">
+            <img src="{{ asset('assets/logotipos/logo.png') }}" alt="{{ config('app.name') }}" />
+        </a>
 
-                <!-- Currency Selector -->
-                <form action="{{ route('change.currency') }}" method="POST">
-                    @csrf
-                    <select name="currency_code" class="form-select form-select-sm font-style" onchange="this.form.submit()">
-                        @foreach (\App\Models\Currency::all() as $currency)
-                            <option value="{{ $currency->code }}" {{ session('currency', 'USD') == $currency->code ? 'selected' : '' }}>
-                                {{ strtoupper($currency->code) }}
-                            </option>
-                        @endforeach
-                    </select>
-                </form>
+        <div class="store-header__actions">
+            <button type="button" class="store-icon-btn d-lg-none" id="store-search-toggle" aria-label="{{ __('store.header.search_placeholder') }}">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
 
-                <!-- Wishlist Icon -->
-                 <a href="{{ auth('customer')->check() ? route('customer.wishlist.index') : route('customer.login') }}" class="text-dark position-relative homepage-icon">
-                    <i class="fa-regular fa-heart"></i>
+            <a href="{{ auth('customer')->check() ? route('customer.wishlist.index') : route('customer.login') }}" class="store-icon-btn d-none d-sm-inline-flex">
+                <i class="fa-regular fa-heart"></i>
+                @if($wishlistCount > 0)
+                    <span class="badge-count" id="wishlist-count">{{ $wishlistCount }}</span>
+                @endif
+            </a>
 
-                    @if($wishlistCount > 0)
-                        <span id="wishlist-count"
-                              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{ $wishlistCount }}
-                        </span>
-                    @endif
-                </a>
-
-                 <!-- Account Icon -->
-                <a href="#" class="text-dark dropdown-toggle homepage-icon" data-bs-toggle="dropdown">
+            <div class="dropdown">
+                <a href="#" class="store-icon-btn" data-bs-toggle="dropdown" aria-label="Cuenta">
                     @auth('customer')
-                        @php
-                            $customer = Auth::guard('customer')->user();
-                        @endphp
+                        @php $customer = Auth::guard('customer')->user(); @endphp
                         @if($customer->profile_image)
-                            <img src="{{ asset('storage/' . $customer->profile_image) }}" 
-                                alt="Profile" 
-                                class="rounded-circle" 
-                                style="width:32px; height:32px; object-fit:cover;">
+                            <img src="{{ asset('storage/' . $customer->profile_image) }}" alt="" class="rounded-circle" style="width:28px;height:28px;object-fit:cover;">
                         @else
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($customer->name) }}" 
-                                alt="Avatar" 
-                                class="rounded-circle" 
-                                style="width:32px; height:32px; object-fit:cover;">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($customer->name) }}" alt="" class="rounded-circle" style="width:28px;height:28px;object-fit:cover;">
                         @endif
                     @else
                         <i class="fa-regular fa-user"></i>
                     @endauth
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end p-2">
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 p-2">
                     @guest('customer')
-                        <li><a class="dropdown-item" href="{{ route('customer.login') }}">Sign In</a></li>
-                        <li><a class="dropdown-item" href="{{ route('customer.register') }}">Sign Up</a></li>
+                        <li><a class="dropdown-item rounded-2" href="{{ route('customer.login') }}">{{ __('store.login.login_btn') }}</a></li>
+                        <li><a class="dropdown-item rounded-2" href="{{ route('customer.register') }}">{{ __('store.register.signup_btn') }}</a></li>
                     @else
-                        <li><a class="dropdown-item" href="{{ route('customer.profile.edit') }}">My Profile</a></li>
+                        <li><a class="dropdown-item rounded-2" href="{{ route('customer.profile.edit') }}">{{ __('store.profile.title') }}</a></li>
                         <li>
-                            <a class="dropdown-item" href="{{ route('customer.logout') }}"
-                            onclick="event.preventDefault(); document.getElementById('customer-logout-form').submit();">
-                            Logout
+                            <a class="dropdown-item rounded-2" href="{{ route('customer.logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('customer-logout-form').submit();">
+                                {{ __('store.header.logout') }}
                             </a>
-                            <form id="customer-logout-form" action="{{ route('customer.logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
+                            <form id="customer-logout-form" action="{{ route('customer.logout') }}" method="POST" class="d-none">@csrf</form>
                         </li>
                     @endguest
                 </ul>
-
-                <!-- Cart Icon -->
-                <a href="{{ route('cart.view') }}" class="text-dark position-relative homepage-icon">
-                    <i class="fa fa-shopping-bag"></i>
-                    <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        {{ session('cart') ? collect(session('cart'))->sum('quantity') : 0 }}
-                    </span>
-                </a>
             </div>
+
+            <a href="{{ route('cart.view') }}" class="store-icon-btn">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="badge-count" id="cart-count">{{ $cartCount }}</span>
+            </a>
         </div>
     </div>
+
+    <div class="store-search-wrap is-collapsed" id="store-search-wrap">
+        @include('themes.xylo.partials.search-form')
+    </div>
+
+    <nav class="store-nav-desktop">
+        <ul class="nav">
+            @if ($headerMenu && $headerMenu->menuItems->count())
+                @foreach ($headerMenu->menuItems as $menuItem)
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url($menuItem->slug) }}">
+                            {{ $menuItem->translation->title ?? 'No Translation' }}
+                        </a>
+                    </li>
+                @endforeach
+            @endif
+        </ul>
+    </nav>
 </header>
+
+<div class="store-drawer-overlay" id="store-drawer-overlay" aria-hidden="true"></div>
+<aside class="store-drawer" id="store-mobile-drawer" aria-hidden="true">
+    <div class="store-drawer__head">
+        <strong>{{ config('app.name', 'Tienda Digital') }}</strong>
+        <button type="button" class="store-drawer__close" id="store-menu-close" aria-label="{{ __('store.header.close_menu') }}">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+    <nav class="store-drawer__nav">
+        @if ($headerMenu && $headerMenu->menuItems->count())
+            @foreach ($headerMenu->menuItems as $menuItem)
+                <a href="{{ url($menuItem->slug) }}">{{ $menuItem->translation->title ?? 'Menú' }}</a>
+            @endforeach
+        @endif
+        <a href="{{ route('shop.index') }}">{{ __('store.home.shop_now') }}</a>
+        <a href="{{ route('cart.view') }}">{{ __('store.cart.breadcrumb_cart') }}</a>
+    </nav>
+    <div class="store-drawer__foot">
+        @guest('customer')
+            <a href="{{ route('customer.login') }}"><i class="fa-regular fa-user me-2"></i>{{ __('store.login.login_btn') }}</a>
+            <a href="{{ route('customer.register') }}">{{ __('store.register.signup_btn') }}</a>
+        @else
+            <a href="{{ route('customer.profile.edit') }}">{{ __('store.profile.title') }}</a>
+            <a href="{{ route('customer.wishlist.index') }}">{{ __('store.wishlist.title') }}</a>
+        @endguest
+    </div>
+</aside>

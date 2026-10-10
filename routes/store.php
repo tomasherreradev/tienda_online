@@ -42,6 +42,13 @@ Route::get('/get-variant-price', [ProductController::class, 'getVariantPrice'])-
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+Route::get('/checkout/mercadopago/success', [CheckoutController::class, 'mercadoPagoSuccess'])->name('mercadopago.success');
+Route::get('/checkout/mercadopago/failure', [CheckoutController::class, 'mercadoPagoFailure'])->name('mercadopago.failure');
+Route::get('/checkout/mercadopago/pending', [CheckoutController::class, 'mercadoPagoPending'])->name('mercadopago.pending');
+Route::get('/checkout/paypal/success', [CheckoutController::class, 'paypalSuccess'])->name('paypal.success');
+Route::get('/checkout/paypal/cancel', [CheckoutController::class, 'paypalCancel'])->name('paypal.cancel');
 
 // Category page
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');

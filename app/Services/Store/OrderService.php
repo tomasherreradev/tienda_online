@@ -9,6 +9,54 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderService
 {
+    public function createOrderFromCart(string $paymentMethod, ?string $transactionId = null, ?float $totalAmount = null): Order
+    {
+        $cart = session('cart', []);
+
+        if ($cart === []) {
+            throw new \RuntimeException('No hay productos en el carrito.');
+        }
+
+        if ($totalAmount === null) {
+            $totalAmount = collect($cart)->sum(fn ($item) => $item['price'] * $item['quantity']);
+        }
+
+        $shipping = session('checkout.shipping', []);
+
+        $order = Order::create([
+            'customer_id' => Auth::guard('customer')->id(),
+            'guest_email' => $shipping['email'] ?? null,
+            'total_amount' => $totalAmount,
+            'status' => 'completed',
+        ]);
+
+        foreach ($cart as $item) {
+            OrderDetail::create([
+                'order_id' => $order->id,
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+            ]);
+        }
+
+        if ($shipping !== []) {
+            ShippingAddress::create([
+                'order_id' => $order->id,
+                'customer_id' => Auth::guard('customer')->id(),
+                'name' => $shipping['name'] ?? null,
+                'phone' => $shipping['phone'] ?? null,
+                'address' => trim(($shipping['address'] ?? '').' '.($shipping['suite'] ?? '')),
+                'city' => $shipping['city'] ?? null,
+                'postal_code' => $shipping['postal_code'] ?? null,
+                'country' => $shipping['country'] ?? config('store.country_name'),
+            ]);
+        }
+
+        session()->forget(['cart', 'cart_count', 'checkout.shipping', 'checkout.mercadopago_reference', 'cart_coupon']);
+
+        return $order;
+    }
+
     /**
      * Create a new order from PayPal payment and session cart.
      *

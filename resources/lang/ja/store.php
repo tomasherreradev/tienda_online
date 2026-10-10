@@ -14,9 +14,9 @@ return [
         'privacy_policy' => 'プライバシーポリシー',
         'terms_of_service' => '利用規約',
         'follow_us' => 'フォローする',
-        'footer_logo_alt' => 'Velstore フッターロゴ',
-        'copyright' => '© 2025 Velstore Demo. 全著作権所有。',
-        'powered_by' => 'Velstore Labsによって提供',
+        'footer_logo_alt' => 'Tejada Hogar フッターロゴ',
+        'copyright' => '© 2025 Tejada Hogar Demo. 全著作権所有。',
+        'powered_by' => 'Tejada Hogar Labsによって提供',
     ],
 
     'home' => [
@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => 'ようこそ',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Tejada Hogar 👋',
         'signup_now' => 'カスタマーアカウントを作成',
         'signup_description' => '登録してショッピングを始め、注文を追跡し、お気に入りを保存し、特別なオファーを手に入れましょう。',
-        'copyright' => '© 2025 Xylo-Theme. 全著作権所有。',
+        'copyright' => '© 2025 Tejada Hogar. 全著作権所有。',
         'welcome_back' => 'さあ始めましょう',
         'form_subtitle' => 'ショッピングアカウントを作成するために情報を入力してください。',
         'name' => '氏名',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => 'お帰りなさい',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Tejada Hogar 👋',
         'login_now' => 'アカウントにログイン',
         'login_description' => '注文管理、ウィッシュリスト、パーソナライズされたショッピング体験のためにアカウントへアクセスしてください。',
-        'copyright' => '© 2025 Xylo-Theme. 全著作権所有。',
+        'copyright' => '© 2025 Tejada Hogar. 全著作権所有。',
         'welcome_back' => 'またお会いできて嬉しいです',
         'form_subtitle' => 'ログイン情報を入力してください。',
         'email' => 'メールアドレス',

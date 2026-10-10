@@ -26,7 +26,7 @@
                 <div class="product-slider">
                     @foreach ($product->images as $image)
                         <div>
-                            <img src="{{ Storage::url($image['image_url']) }}" alt="{{ $image['name'] }}" style="width: 100%; height: auto;" />
+                            <img src="{{ $image->url }}" alt="{{ $image->name }}" style="width: 100%; height: auto;" />
                         </div>
                     @endforeach
                 </div>
@@ -286,18 +286,18 @@
                     if(response.status === 'added') {
                         icon.removeClass('fa-regular text-secondary')
                             .addClass('fa-solid text-danger');
-                        toastr.success(response.message || 'Added to favorites ❤️');
+                        showStoreToast('success', response.message);
                     } else if(response.status === 'removed') {
                         icon.removeClass('fa-solid text-danger')
                             .addClass('fa-regular text-secondary');
-                        toastr.info(response.message || 'Removed from favorites 💔');
+                        showStoreToast('info', response.message);
                     }
                 },
                 error: function(xhr) {
                     if(xhr.status === 401){
-                        toastr.warning('{{ __('store.product_detail.login_to_wishlist') }}');
+                        showStoreToast('warning', @json(__('store.product_detail.login_to_wishlist')));
                     } else {
-                        toastr.error('Something went wrong.');
+                        showStoreToast('error', @json(__('store.notify.generic_error')));
                     }
                 }
             });
@@ -335,18 +335,7 @@
     });
     </script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>  
     <script>
-    @if(Session::has('success'))
-        toastr.success("{{ session('success') }}");
-    @endif
-
-    @if(Session::has('error'))
-        toastr.error("{{ session('error') }}");
-    @endif
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>  
     <script>
         $(document).ready(function() {
             $('.product-slider').slick({
@@ -465,7 +454,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                toastr.success(data.message);
+                showStoreToast('success', data.message);
                 updateCartCount(data.cart);
             })
             .catch(error => console.error("Error:", error));

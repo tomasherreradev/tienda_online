@@ -108,17 +108,6 @@
 </div>
 @endsection
 @section('js')
-@if (session('success'))
-    <script>
-        toastr.success("{{ session('success') }}", "{{ __('store.profile.success') }}", {
-            closeButton: true,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            timeOut: 5000
-        });
-    </script>
-@endif
-
 {{-- Live Preview Script --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {

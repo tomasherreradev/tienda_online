@@ -31,4 +31,14 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'mercadopago' => [
+        'access_token' => env('MERCADOPAGO_ACCESS_TOKEN'),
+        'public_key' => env('MERCADOPAGO_PUBLIC_KEY'),
+    ],
+
+    'http' => [
+        'verify_ssl' => env('HTTP_VERIFY_SSL', true),
+        'ca_bundle' => env('CURL_CA_BUNDLE', storage_path('app/cacert.pem')),
+    ],
+
 ];

@@ -10,7 +10,7 @@ class ForgotPasswordController extends Controller
 {
     public function showLinkRequestForm()
     {
-        return view('customer.auth.passwords.email');
+        return view('themes.xylo.auth.forgot-password');
     }
 
     public function sendResetLinkEmail(Request $request)

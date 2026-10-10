@@ -12,28 +12,14 @@ class CurrencySeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('currencies')->delete();
+
         DB::table('currencies')->insert([
             [
-                'name' => 'US Dollar',
-                'code' => 'USD',
+                'name' => 'Peso argentino',
+                'code' => 'ARS',
                 'symbol' => '$',
                 'exchange_rate' => 1.0000,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Euro',
-                'code' => 'EUR',
-                'symbol' => '€',
-                'exchange_rate' => 0.9200,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'British Pound',
-                'code' => 'GBP',
-                'symbol' => '£',
-                'exchange_rate' => 0.7900,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

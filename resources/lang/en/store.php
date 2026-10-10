@@ -14,9 +14,9 @@ return [
         'privacy_policy' => 'Privacy Policy',
         'terms_of_service' => 'Terms of Service',
         'follow_us' => 'Follow Us',
-        'footer_logo_alt' => 'Velstore Footer Logo',
-        'copyright' => '© 2025 Velstore Demo. All Rights Reserved.',
-        'powered_by' => 'Powered by Velstore Labs',
+        'footer_logo_alt' => 'Tejada Hogar Footer Logo',
+        'copyright' => '© 2025 Tejada Hogar Demo. All Rights Reserved.',
+        'powered_by' => 'Powered by Tejada Hogar Labs',
     ],
 
     'home' => [
@@ -227,10 +227,10 @@ return [
 
     'register' => [
         'hello' => 'Welcome',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Tejada Hogar 👋',
         'signup_now' => 'Create Your Customer Account',
         'signup_description' => 'Sign up to start shopping, track your orders, save your favorite items, and unlock exclusive offers.',
-        'copyright' => '© 2025 Xylo-Theme. All rights reserved.',
+        'copyright' => '© 2025 Tejada Hogar. All rights reserved.',
         'welcome_back' => 'Let’s Get Started',
         'form_subtitle' => 'Enter your details to create your shopping account.',
         'name' => 'Full Name',
@@ -244,10 +244,10 @@ return [
 
     'login' => [
         'hello' => 'Welcome Back',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Tejada Hogar 👋',
         'login_now' => 'Login to Your Account',
         'login_description' => 'Access your account to manage orders, wishlist, and enjoy personalized shopping.',
-        'copyright' => '© 2025 Xylo-Theme. All rights reserved.',
+        'copyright' => '© 2025 Tejada Hogar. All rights reserved.',
         'welcome_back' => 'Great to See You Again',
         'form_subtitle' => 'Please enter your login details to continue.',
         'email' => 'Email Address',

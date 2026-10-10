@@ -2,7 +2,7 @@
 
 return [
     'auth' => [
-        'velstore' => 'فيلستور',
+        'velstore' => 'Tejada Hogar',
         'login' => 'تسجيل الدخول',
         'email' => 'عنوان البريد الإلكتروني',
         'password' => 'كلمة المرور',

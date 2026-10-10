@@ -46,7 +46,7 @@ class PayPalService
         return $response->json()['access_token'] ?? null;
     }
 
-    public function createOrder($amount, $currency = 'USD')
+    public function createOrder($amount, $currency = 'ARS')
     {
         $accessToken = $this->getAccessToken();
 

@@ -12,7 +12,7 @@ class ResetPasswordController extends Controller
 {
     public function showResetForm(Request $request, $token)
     {
-        return view('customer.auth.passwords.reset', [
+        return view('themes.xylo.auth.reset-password', [
             'token' => $token,
             'email' => $request->email,
         ]);

@@ -9,12 +9,8 @@ class CurrencyController extends Controller
 {
     public function changeCurrency(Request $request)
     {
-        $request->validate([
-            'currency_code' => 'required|exists:currencies,code',
-        ]);
+        session(['currency' => storeCurrencyCode()]);
 
-        session(['currency' => $request->currency_code]);
-
-        return back()->with('success', 'Currency changed to '.$request->currency_code);
+        return back();
     }
 }
