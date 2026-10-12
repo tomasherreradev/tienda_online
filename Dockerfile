@@ -29,3 +29,11 @@ RUN composer install --no-dev --optimize-autoloader \
 EXPOSE 80
 
 CMD ["apache2-foreground"]
+
+COPY start.sh /usr/local/bin/start.sh
+
+RUN chmod +x /usr/local/bin/start.sh
+
+EXPOSE 80
+
+CMD ["/usr/local/bin/start.sh"]
